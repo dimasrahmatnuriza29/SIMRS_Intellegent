@@ -1,0 +1,35 @@
+# Dependencies / build
+node_modules/
+dist/
+.output/
+.next/
+.turbo/
+.vite/
+.cache/
+.parcel-cache/
+
+# Env & secrets
+.env
+.env.*
+!.env.example
+
+# Logs & OS
+logs
+*.log
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor / IDE (local)
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Cursor local (rules may be committed selectively)
+.cursor/
+
+# Coverage / test
+coverage/
+.nyc_output/
+*.lcov
