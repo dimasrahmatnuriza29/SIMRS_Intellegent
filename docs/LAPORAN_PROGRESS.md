@@ -29,7 +29,7 @@ Kunjungan hari ini, Antrian aktif, Pasien rawat inap, Resep masuk — satuan kec
 
 ### Alert Row (klik-able → modal)
 - **Stok obat menipis** → popup tabel obat + sisa stok + status
-- **Bridging BPJS** → buka layar Bridging BPJS (cek peserta / SEP / Antrol / klaim) *(simulasi, bukan VClaim nyata)*
+- **Bridging BPJS** → popup status koneksi + klaim pending *(simulasi, bukan VClaim nyata)*
 - Modal reusable `openModal`/`modalData`; tutup via ✕ / klik overlay / Esc
 
 ### Line Chart — `lineChart()` (reusable, SVG murni)
@@ -174,72 +174,25 @@ Poli rujuk → RI_WAIT · Pulang → KQ · Home pill okupansi & badge menu live
 ### Tab
 1. **Antrean & Dispensing** — filter Ralan/Ranap; alur Antri → Verifikasi farmasis (alergi/stok) → Racik (cek item) → Serah; etiket + panggil; stok keluar + tagihan Kasir
 2. **Stok Obat** — saldo, min, status kritis/habis, kartu stok (mutasi IN/OUT)
-3. **Penerimaan** — obat + qty + faktur + supplier → stok naik + histori
+3. **Prediksi Stok** — ETA habis (rata-rata pemakaian/hari), risiko Habis/Kritis/Waspada/Aman, saran reorder 14 hari, sparkline 14 hr simulasi; deep-link ke Penerimaan & Kartu Stok; label *estimasi simulasi* (bukan auto-PO)
+4. **Penerimaan** — obat + qty + faktur + supplier → stok naik + histori
 
 ### Seed
-Paracetamol/Amoxicillin/ORS kritis; resep F-01 Verif, F-02 Antri ralan, F-03 Antri ranap
+Paracetamol/Amoxicillin/ORS kritis; resep F-01 Verif, F-02 Antri ralan, F-03 Antri ranap; `STOK_USAGE_DAY` untuk forecast POC
 
-## 7. Kasir
+## 7. Layar Lain (belum dipolish)
 
-**Status: POLISHED v2** · `#screen-kasir` · 26 Okt 2026
+- **Kasir** — antrean tagihan & pembayaran (tanpa modul anomali — digugurkan dari POC)
+- **RME** — tab **Pasien & Timeline** + tab **Tren Penyakit** (ICD 30hr vs lalu, lonjakan ≥30%, obat terkait → Prediksi Stok); ringkas tren juga di **beranda** bawah Menu Utama
+- ~~Insight Hub beranda~~ — digugurkan (tetap pakai panel Tren Penyakit saja)
+- **Placeholder generik** — Jadwal Dokter, Master Data, IGD, Bridging BPJS
 
-- KPI: Menunggu · Lunas (+pendapatan tunai) · Piutang (+nilai klaim) · Total
-- Filter: Semua / Menunggu / Umum / BPJS / Asuransi / Lunas / Piutang
-- Umum: metode **Tunai / QRIS / Debit** → Lunas + kuitansi
-- BPJS/Asuransi: **Catat Piutang** (pasien Rp 0) — bukti klaim `belum_klaim` simulasi
-- Label sumber: Farmasi / Poli / Ranap
+---
 
-## 8. Rekam Medis (RME)
-
-**Status: POLISHED v1** · `#screen-rme` · 27 Okt 2026
-
-- Cari pasien RM / NIK / nama (+ shortcut demo Rina/Budi/Sari)
-- Header: identitas, alergi, penjamin, kunjungan aktif
-- Filter: Semua / Ralan / Ranap / IGD
-- Timeline klikable → detail SOAP, ICD primer/sekunder, resep, status tagihan
-- **Display-only standar:** asesmen terkait (perawat/gizi/farmasi) · penunjang (modal) · berkas/scan (preview mock) · persetujuan · audit trail · ringkasan pulang (ranap/IGD)
-- Ringkasan pasien + cuplikan ringkasan pulang terakhir
-- Search global home → buka RME pasien terpilih
-- Read-only (penulisan klinis tetap di Poli/Ranap)
-
-## 9. Jadwal Dokter (POLISHED v1)
-
-- Board praktik harian (kartu): dokter · poli · ruang · jam · kuota terisi/max · sisa · status (Praktik/Penuh/Libur)
-- Navigasi tanggal ±3 hari + strip minggu + tombol **Hari ini**
-- Filter poli + status; KPI praktik / kuota terpakai / penuh / libur
-- Aksi simulasi: tandai libur (+pengganti) · buka praktik · ubah kuota
-- Terhubung Pendaftaran: pilihan dokter hari ini mengikuti slot yang tidak libur
-- Bukan Antrol/booking online nyata
-
-## 10. Master Data (POLISHED v1)
-
-- Tab: Pegawai · Dokter · Pasien · Poli · Penjamin · Obat · Tarif · ICD-10 · Bangsal
-- Tabel + cari + tambah/ubah; nonaktif/hapus (simulasi memori sesi)
-- Sinkron ringan: pasien↔`patientsDB`, obat↔stok farmasi, ICD↔picker poli, dokter/poli↔Pendaftaran & Jadwal, bangsal↔nama/kelas Ranap
-- Bukan persistensi DB / RBAC admin nyata
-
-## 11. IGD — Gawat Darurat (POLISHED v1)
-
-- Alur standar: **prehospital/ambulans (simulasi)** → registrasi → triase ESI → zona bed → TTV & SOAP → disposisi
-- Tab Ambulans: notifikasi · di jalan · tiba · serah terima → antrian triase; jejak pra-RS di detail pasien
-- Board zona + antrian prioritas + KPI; re-triase; siap disposisi
-- Disposisi: **Pulang** · **Admit Ranap** (→ antrian Ranap) · **Rujuk**
-- Badge menu = pasien IGD aktif + ambulans aktif
-- Bukan koneksi PSC/API ambulans nyata
-
-## 12. Bridging BPJS (POLISHED v1)
-
-- Alur POC: **cek peserta → SEP → Antrol → klaim** (bukan koneksi VClaim/Antrean RS/Applicare nyata)
-- Status koneksi mock: VClaim · Antrean RS · Applicare
-- Tab **Peserta** — cari NIK/No.Kartu/RM; tampil status aktif/kelas/FKTP; lanjut buat SEP / buka RME
-- Tab **SEP** — daftar SEP + terbitkan RJTL/RITL/IGD; update pulang / batalkan (simulasi)
-- Tab **Antrol** — sinkron pasien BPJS dari Antrian Poli; kirim ulang taskid
-- Tab **Klaim** — pending → validasi → terkirim → dibayar; badge menu = jumlah pending/validasi
-- Chip Dashboard Bridging BPJS membuka layar ini
-
-## 13. Hal yang Ditolak / Dihapus
+## 8. Hal yang Ditolak / Dihapus
 
 - ~~Card hero "Selamat datang"~~ · ~~Dock navigasi bawah~~ · ~~Orbit solar~~ (→ ikon medis melayang) · ~~Backdrop dim saat search~~ (→ push-down) · ~~Tombol Pasien Baru bawah~~ · ~~Tombol back putih~~ (→ teal kaca)
+- ~~Anomali Billing~~ — digugurkan dari POC (tab Kasir + panel beranda + seed flag)
 
 ## Cara Preview
 

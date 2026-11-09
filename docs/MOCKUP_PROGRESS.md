@@ -5,7 +5,8 @@ Tanggal: 26 Oktober 2026 · File: `design/mockup.html` (single-file HTML+CSS+JS 
 ## Arah Desain (disetujui user)
 
 - Modern, responsive (mobile / tablet / PC), tema RS, animasi minimalis tapi hidup
-- Home ala **launcher Android** — grid ikon menu, bukan sidebar
+- Home ala **launcher Android** — grid ikon menu, bukan sidebar; **Tren Penyakit** ringkas di bawah Menu Utama (3 ICD naik → RME)
+- **RME** — tab Pasien & Timeline + **Tren Penyakit** (filter naik/lonjakan/turun, spark 8 minggu, chip obat → Farmasi Prediksi Stok)
 - **Tanpa login** untuk prototype
 - Palet: teal `#0d9488` + biru `#2563eb`, glassmorphism transparan
 
@@ -30,14 +31,11 @@ Dashboard · Pendaftaran · Antrian Poli (badge 12) · Pelayanan Poli (badge 3) 
 - **Pendaftaran (POLISHED)** — detail + simulasi NIK: [`LAPORAN_PROGRESS.md`](LAPORAN_PROGRESS.md) §3
 - **Antrian Poli (POLISHED)** — konsol antrean 2 kolom + koneksi CPPT: [`LAPORAN_PROGRESS.md`](LAPORAN_PROGRESS.md) §4
 - **Pelayanan Poli** — daftar dinamis dari state antrean + form CPPT/SOAP + chips tindakan; **Rujuk Rawat Inap** → antrian admit
-- **Farmasi (POLISHED v2)** — Antrean & Dispensing (Antri→Verifikasi→Racik→Serah) + filter ralan/ranap + KPI + **Stok Obat** (saldo/kritis/kartu stok mutasi) + **Penerimaan** barang; serah mengurangi stok → Kasir
-- **Kasir (POLISHED v2)** — KPI (menunggu/lunas/piutang) + filter penjamin/status + metode Tunai/QRIS/Debit + BPJS/Asuransi → **Piutang** (bukan Lunas) + label sumber (Farmasi/Poli/Ranap) + kuitansi/bukti klaim
+- **Farmasi (POLISHED v2 + Prediksi)** — Antrean & Dispensing (Antri→Verifikasi→Racik→Serah) + filter ralan/ranap + KPI + **Stok Obat** (saldo/kritis/kartu stok mutasi) + **Prediksi Stok** (ETA/reorder/risiko, estimasi simulasi) + **Penerimaan** barang; serah mengurangi stok → Kasir
+- **Kasir** — antrean tagihan & pembayaran (Umum/BPJS/Asuransi → Lunas/Piutang)
 - **Rawat Inap (POLISHED v1)** — Command Center: bed board (Melati/Mawar/VIP/ICU) + KPI BOR/kosong/LOS + kartu bed (alergi/isolasi/risiko/hari rawat) + antrian admit + rencana pulang (kanban) + visite CPPT singkat + checklist pulang → tagihan kamar ke Kasir
-- **RME (POLISHED v1)** — cari pasien (RM/NIK/nama) + header 360° (alergi/penjamin/aktif) + filter tipe + timeline klikable (SOAP/dx/resep/tagihan) + ringkasan; terhubung search global
-- **Jadwal Dokter (POLISHED v1)** — board harian + nav tanggal/strip 7 hari + kuota/status/libur+pengganti + filter; sinkron opsi dokter di Pendaftaran
-- **Master Data (POLISHED v1)** — 9 tab (pegawai/dokter/pasien/poli/penjamin/obat/tarif/ICD/bangsal) + CRUD simulasi; sinkron ke modul terkait
-- **IGD (POLISHED v1)** — board zona + triase ESI + TTV/SOAP + disposisi; **ambulans/prehospital simulasi** (notif→tiba→serah terima); admit → Ranap
-- **Bridging BPJS (POLISHED v1)** — simulasi VClaim/Antrol/Applicare: cek peserta → terbit SEP → Antrol (sinkron Antrian Poli) → monitoring klaim; badge = klaim pending
+- **RME** — timeline riwayat kunjungan pasien
+- **Placeholder generik** — Jadwal Dokter, Master Data, IGD, Bridging BPJS
 
 ### 4. Responsif
 
@@ -63,7 +61,9 @@ Dashboard · Pendaftaran · Antrian Poli (badge 12) · Pelayanan Poli (badge 3) 
 
 ## Belum Dikerjakan
 
+- Polish visual layar RME
 - Transfer bangsal/kelas di Ranap (opsional demo)
+- Layar nyata: IGD, Bridging BPJS, Jadwal Dokter, Master Data
 - Detail obat hasil pencarian (sementara ke placeholder generik)
 - Layar hasil pencarian lengkap (Enter → halaman penuh)
 - Integrasi backend nyata — badge SEP/SatuSehat saat ini **hanya simulasi mockup**, bukan bukti koneksi VClaim/Antrol/SatuSehat

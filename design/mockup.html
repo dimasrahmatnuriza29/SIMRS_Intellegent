@@ -66,6 +66,8 @@
 
   /* ===== Layout ===== */
   .app { max-width:1080px; margin:0 auto; padding:20px 18px 40px; }
+  /* Beranda lebih lebar untuk monitor pameran — kurangi ruang kosong kiri/kanan */
+  .app.home-wide { max-width:min(1520px, 96vw); padding-left:28px; padding-right:28px; }
   .topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:22px; }
   .brand { display:flex; align-items:center; gap:12px; }
   .brand-logo { width:46px; height:46px; border-radius:14px; background:linear-gradient(135deg, var(--primary), var(--blue));
@@ -330,6 +332,156 @@
   #screen-farmasi .split-grid { align-items:stretch; }
   @media (max-width:900px) { .fq-kpi { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 
+  /* ===== Farmasi — Prediksi Stok ===== */
+  .pred-disc { display:flex; gap:10px; align-items:flex-start; padding:10px 14px; margin-bottom:12px;
+    border-radius:12px; background:rgba(14,165,233,.08); border:1px solid rgba(14,165,233,.22);
+    font-size:.78rem; color:#0369a1; line-height:1.45; }
+  .pred-disc b { color:#0c4a6e; }
+  .pred-kpi { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-bottom:14px; }
+  .pred-kpi .stat { padding:12px; }
+  .pred-kpi .stat .value { font-size:1.25rem; }
+  .pred-filters { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+  .stok-table tr.waspada { background:rgba(224,242,254,.55); }
+  .stok-table tr.pred-sel { outline:2px solid rgba(13,148,136,.45); outline-offset:-2px; }
+  .pred-chart-wrap { margin-top:8px; padding:14px 12px 10px; border-radius:14px;
+    background:rgba(255,255,255,.72); border:1px solid rgba(15,23,42,.06); }
+  .pred-chart-legend { display:flex; flex-wrap:wrap; gap:10px 14px; margin-bottom:10px;
+    font-size:.72rem; font-weight:700; color:var(--muted); }
+  .pred-chart-legend span { display:inline-flex; align-items:center; gap:6px; }
+  .pred-chart-legend i { width:12px; height:12px; border-radius:3px; display:inline-block; }
+  .pred-chart-legend i.ok { background:#0d9488; }
+  .pred-chart-legend i.warn { background:#d97706; }
+  .pred-chart-legend i.crit { background:#dc2626; }
+  .pred-spark { display:flex; align-items:flex-end; gap:6px; height:132px; margin-top:4px;
+    padding:8px 4px 0; border-radius:10px;
+    background:linear-gradient(180deg, rgba(13,148,136,.06), transparent 70%); }
+  .pred-spark .bar {
+    flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+    height:100%; gap:4px;
+  }
+  .pred-spark .bar b {
+    font-size:.68rem; font-weight:800; font-variant-numeric:tabular-nums; color:#0f766e; line-height:1;
+  }
+  .pred-spark .bar b.warn { color:#b45309; }
+  .pred-spark .bar b.crit { color:#b91c1c; }
+  .pred-spark .bar i {
+    width:100%; max-width:28px; border-radius:6px 6px 3px 3px;
+    background:linear-gradient(180deg,#2dd4bf,#0d9488);
+    box-shadow:0 4px 10px rgba(13,148,136,.25); min-height:10px;
+  }
+  .pred-spark .bar i.warn { background:linear-gradient(180deg,#fbbf24,#d97706); box-shadow:0 4px 10px rgba(217,119,6,.28); }
+  .pred-spark .bar i.crit { background:linear-gradient(180deg,#f87171,#dc2626); box-shadow:0 4px 10px rgba(220,38,38,.28); }
+  .pred-spark .bar small {
+    font-size:.62rem; font-weight:700; color:var(--muted); letter-spacing:.02em;
+  }
+  .pred-eta { font-weight:800; font-variant-numeric:tabular-nums; }
+  .pred-eta.crit { color:#b91c1c; }
+  .pred-eta.warn { color:#b45309; }
+  .pred-eta.ok { color:#047857; }
+  .pred-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+  .pred-insight { font-size:.8rem; line-height:1.55; color:var(--text); background:rgba(255,255,255,.55);
+    border:1px solid rgba(15,23,42,.06); border-radius:12px; padding:12px 14px; margin-top:10px; }
+  .pred-insight li { margin:4px 0 4px 1.1em; }
+  @media (max-width:900px) { .pred-kpi { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+
+  /* ===== Disease Trend (RME + beranda) ===== */
+  .dx-home { margin:0 0 14px; }
+  .dx-home-head { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin-bottom:8px; flex-wrap:wrap; }
+  .dx-home-head h3 { margin:0; font-size:.9rem; font-weight:800; letter-spacing:-.01em; }
+  .dx-home-head small { color:var(--muted); font-size:.72rem; display:block; margin-top:2px; }
+  .dx-home-link { font-size:.74rem; font-weight:700; color:#0f766e; text-decoration:none;
+    border:1px solid rgba(13,148,136,.35); background:rgba(13,148,136,.08); padding:6px 10px; border-radius:999px; cursor:pointer; }
+  .dx-home-link:hover { background:rgba(13,148,136,.16); }
+  .dx-home-body { display:grid; grid-template-columns:minmax(0,1.55fr) minmax(260px,.95fr); gap:12px; align-items:stretch; }
+  .dx-home-grid { display:grid; grid-template-columns:1fr; grid-template-rows:repeat(3,minmax(0,1fr)); gap:8px; min-height:0; height:100%; }
+  .dx-home-grid .dx-card { height:100%; display:flex; flex-direction:column; justify-content:center; min-height:0; }
+  @media (max-width:980px) {
+    .dx-home-body { grid-template-columns:1fr; }
+    .dx-home-grid { grid-template-columns:repeat(3,minmax(0,1fr)); grid-template-rows:none; height:auto; }
+  }
+  @media (max-width:700px) { .dx-home-grid { grid-template-columns:1fr; } }
+  #screen-home .dx-card { padding:10px 12px; }
+  #screen-home .dx-card .dx-n { font-size:.8rem; margin:2px 0 6px; }
+  #screen-home .dx-card .dx-now { font-size:1.15rem; }
+  #screen-home .dx-card .dx-meta { margin-top:6px; font-size:.68rem; }
+  /* Kompak untuk monitor pameran (tanpa scroll) */
+  @media (min-width:1024px) and (max-height:1000px) {
+    #screen-home .menu-panel { padding:18px 22px; margin-bottom:12px; }
+    #screen-home .menu-panel-title { font-size:.78rem; margin-bottom:12px; }
+    #screen-home .menu-grid { gap:16px 14px; }
+    #screen-home .menu-icon { width:72px; height:72px; border-radius:20px; }
+    #screen-home .menu-icon svg { width:30px; height:30px; }
+    #screen-home .menu-item span { font-size:.82rem; }
+    #screen-home .menu-item { gap:6px; }
+    #screen-home .ekg-banner { margin-bottom:8px; }
+    #screen-home .search-wrap { margin-bottom:10px; }
+    #screen-home .pill-row { margin-top:8px; }
+  }
+  .dx-card { padding:14px 14px 12px; cursor:pointer; transition:transform .15s, box-shadow .15s; }
+  .dx-card:hover { transform:translateY(-2px); box-shadow:0 12px 28px rgba(15,23,42,.1); }
+  .dx-card .dx-k { font-size:.72rem; font-weight:800; color:#0f766e; letter-spacing:.04em; }
+  .dx-card .dx-n { font-size:.88rem; font-weight:700; margin:4px 0 8px; line-height:1.3; }
+  .dx-card .dx-row { display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
+  .dx-card .dx-now { font-size:1.35rem; font-weight:800; font-variant-numeric:tabular-nums; }
+  .dx-chg { font-size:.75rem; font-weight:800; padding:3px 8px; border-radius:999px; display:inline-block; }
+  .dx-chg.up { background:#fee2e2; color:#b91c1c; }
+  .dx-chg.down { background:#dcfce7; color:#15803d; }
+  .dx-chg.flat { background:#f1f5f9; color:#64748b; }
+  .dx-card .dx-meta { margin-top:8px; font-size:.72rem; color:var(--muted); line-height:1.4; }
+  .dx-disc { display:flex; gap:10px; align-items:flex-start; padding:10px 14px; margin-bottom:12px;
+    border-radius:12px; background:rgba(14,165,233,.08); border:1px solid rgba(14,165,233,.22);
+    font-size:.78rem; color:#0369a1; line-height:1.45; }
+  .dx-disc b { color:#0c4a6e; }
+  .dx-kpi { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-bottom:14px; }
+  .dx-kpi .stat { padding:12px; }
+  .dx-kpi .stat .value { font-size:1.25rem; }
+  @media (max-width:900px) { .dx-kpi { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+  .dx-table { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .dx-table th { text-align:left; font-size:.66rem; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--muted); padding:10px 12px; border-bottom:1px solid rgba(15,23,42,.08); }
+  .dx-table td { padding:10px 12px; border-bottom:1px solid rgba(15,23,42,.05); vertical-align:middle; }
+  .dx-table tr:last-child td { border-bottom:none; }
+  .dx-table tr.dx-sel { outline:2px solid rgba(13,148,136,.45); outline-offset:-2px; }
+  .dx-table tr.hot { background:rgba(254,226,226,.4); }
+  .dx-table .num { font-weight:800; font-variant-numeric:tabular-nums; }
+  .dx-sparkline { display:flex; align-items:flex-end; gap:5px; height:88px; margin-top:8px;
+    padding:10px 6px 0; border-radius:12px; background:rgba(255,255,255,.65); }
+  .dx-sparkline .bar { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; gap:3px; }
+  .dx-sparkline .bar i { width:100%; max-width:22px; border-radius:5px 5px 2px 2px;
+    background:linear-gradient(180deg,#38bdf8,#0284c7); min-height:8px; }
+  .dx-sparkline .bar i.now { background:linear-gradient(180deg,#2dd4bf,#0d9488); }
+  .dx-sparkline .bar small { font-size:.6rem; font-weight:700; color:var(--muted); }
+  .dx-obat-list { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+  .dx-obat-chip { font-size:.72rem; font-weight:700; padding:6px 10px; border-radius:999px; cursor:pointer;
+    background:rgba(13,148,136,.1); color:#0f766e; border:1px solid rgba(13,148,136,.25); }
+  .dx-obat-chip:hover { background:rgba(13,148,136,.2); }
+  .dx-home-chart { margin:0; padding:12px 14px 10px !important; width:100%; min-width:0; box-sizing:border-box;
+    display:flex; flex-direction:column; height:100%; }
+  .dx-home-chart-top { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; margin-bottom:2px; }
+  .dx-home-chart .chart-legend { font-size:.7rem; gap:12px; margin:0; }
+  .dx-home-chart .panel-title { font-size:.82rem; margin:2px 0 4px !important; }
+  .dx-home-chart .linechart {
+    width:100% !important; flex:1 1 auto; min-height:150px; height:auto !important; max-height:none !important;
+    display:block; min-width:0;
+  }
+  .dx-home-chart .chart-legend i.fc {
+    background:none; border:none; height:0; width:18px;
+    border-top:2.5px dashed #2563eb; border-radius:0; vertical-align:middle;
+  }
+  .dx-home-note { font-size:.68rem; color:var(--muted); margin-top:4px; line-height:1.35; }
+  /* Forecast: animasi digarap JS (rAF) agar jalan di Simple Browser / Electron */
+  .dx-fc-line { filter:drop-shadow(0 0 3px rgba(37,99,235,.45)); }
+  .dx-hist-line {
+    stroke-dasharray:1; stroke-dashoffset:1; pathLength:1;
+    animation:lcdraw 1.15s cubic-bezier(.4,0,.2,1) .08s forwards;
+    filter:drop-shadow(0 0 4px rgba(13,148,136,.55));
+  }
+  .dx-hist-area { opacity:0; animation:lcfade .75s ease .55s forwards; }
+  .dx-hist-dot { opacity:0; animation:lcpop .32s ease backwards; transform-box:fill-box; transform-origin:center; }
+  @media (prefers-reduced-motion:reduce) {
+    .dx-hist-line, .dx-hist-area, .dx-hist-dot { animation:none !important; opacity:1; stroke-dashoffset:0; transform:none; }
+  }
+
   /* ===== Kasir — rincian tagihan ===== */
   .kq-row { display:flex; align-items:baseline; gap:10px; padding:8px 2px; border-bottom:1px dashed #e2e8f0; font-size:.84rem; }
   .kq-row .k-qty { color:var(--muted); font-size:.74rem; flex:none; }
@@ -352,6 +504,7 @@
   .receipt .piutang { text-align:center; font-size:1.15rem; font-weight:900; color:#c2410c;
     border:3px solid #c2410c; border-radius:8px; padding:4px; margin:12px 6px; letter-spacing:.2em; transform:rotate(-2deg); }
   @media (max-width:900px) { .kq-kpi { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+
   .v-item { background:rgba(255,255,255,.7); border:1.5px solid #e2e8f0; border-radius:10px; padding:5px 9px; }
   .v-item label { display:block; font-size:.58rem; font-weight:800; color:var(--muted); letter-spacing:.05em; }
   .v-item input { width:100%; border:none; background:transparent; font-size:.85rem; font-weight:700; outline:none; color:var(--text); }
@@ -1049,6 +1202,8 @@
   @media (min-width:1024px) {
     .split-grid { grid-template-columns:1.6fr 1fr; align-items:start; }
     .split-grid.left-narrow { grid-template-columns:1fr 1.6fr; }
+    /* Prediksi Stok: tabel kiri lebih sempit, detail kanan lebih lebar */
+    .split-grid.pred-split { grid-template-columns:0.82fr 1.55fr; }
   }
 
   @media (max-width:640px) {
@@ -1130,7 +1285,7 @@
   <svg class="art a12 alt" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z"/></svg>
 </div>
 
-<div class="app">
+<div class="app home-wide">
   <div class="topbar">
     <div class="brand">
       <div class="brand-logo">
@@ -1209,6 +1364,37 @@
         <div class="menu-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="15" rx="2.5"/><circle cx="8.5" cy="11" r="2"/><path d="M13 9.5h5M13 12.5h5"/><path d="M5.5 16.5c.6-1.4 1.7-2 3-2s2.4.6 3 2"/></svg></div>
         <span>Bridging BPJS</span>
       </div>
+      </div>
+    </div>
+
+    <div class="dx-home" id="dx-home">
+      <div class="dx-home-head">
+        <div>
+          <h3>Tren Penyakit</h3>
+          <small>Estimasi simulasi · 30 hari vs 30 hari sebelumnya · top ICD naik</small>
+        </div>
+        <button type="button" class="dx-home-link" id="dx-home-more">Lihat semua di RME →</button>
+      </div>
+      <div class="dx-home-body">
+        <div class="chart glass dx-home-chart">
+          <div class="dx-home-chart-top">
+            <div class="chart-legend">
+              <span><i></i>Aktual (8 minggu)</span>
+              <span><i class="fc"></i>Forecast (4 minggu)</span>
+            </div>
+            <div class="pred-filters" id="dx-home-chips" style="margin:0;"></div>
+          </div>
+          <div class="panel-title">Forecast Tren ICD <small id="dx-home-chart-sub">pilih diagnosa</small></div>
+          <svg class="linechart" id="lc-dx-home" viewBox="0 0 720 180" preserveAspectRatio="none" aria-label="Grafik forecast tren penyakit">
+            <defs>
+              <linearGradient id="dxhomegrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(13,148,136,.26)"/><stop offset="1" stop-color="rgba(13,148,136,0)"/></linearGradient>
+              <linearGradient id="dxhomeline" x1="0" x2="1"><stop offset="0" stop-color="#0d9488"/><stop offset="1" stop-color="#0f766e"/></linearGradient>
+            </defs>
+          </svg>
+          <div class="chart-tip" id="lc-dx-home-tip"></div>
+          <div class="dx-home-note">Garis putus = proyeksi linear (POC) · bukan model epidemiologi resmi</div>
+        </div>
+        <div class="dx-home-grid" id="dx-home-grid"></div>
       </div>
     </div>
 
@@ -1615,6 +1801,7 @@
     <div class="mode-toggle" id="fq-tabs">
       <button class="mt-btn active" data-fq="antrian">💊 Antrean & Dispensing</button>
       <button class="mt-btn" data-fq="stok">📦 Stok Obat</button>
+      <button class="mt-btn" data-fq="prediksi">📈 Prediksi Stok</button>
       <button class="mt-btn" data-fq="terima">📥 Penerimaan</button>
     </div>
 
@@ -1665,10 +1852,10 @@
     <div id="fq-view-stok" style="display:none;">
       <div class="split-grid">
         <div>
-          <div class="panel-title">Saldo Depo Farmasi <small id="fq-stok-sub">live</small></div>
+          <div class="panel-title">Stock Depo Farmasi <small id="fq-stok-sub">live</small></div>
           <div class="glass" style="padding:8px 4px; overflow-x:auto;">
             <table class="stok-table" id="fq-stok-table"><thead>
-              <tr><th>Obat</th><th>Saldo</th><th>Min</th><th>Status</th><th></th></tr>
+              <tr><th>Obat</th><th>Stock</th><th>Min</th><th>Status</th><th></th></tr>
             </thead><tbody id="fq-stok-body"></tbody></table>
           </div>
         </div>
@@ -1686,6 +1873,61 @@
                 <div class="pcard-side"><span class="badge b-ranap" id="fq-m-saldo">—</span></div>
               </div>
               <div class="mutasi-list" id="fq-mutasi-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="fq-view-prediksi" style="display:none;">
+      <div class="pred-disc">
+        <span>ℹ</span>
+        <div><b>Estimasi simulasi</b> — prediksi berbasis rata-rata pemakaian harian (POC). Bukan perintah PO otomatis; keputusan tetap di farmasis / pengadaan.</div>
+      </div>
+      <div class="pred-kpi">
+        <div class="stat glass"><div class="label">Habis / 0 hari</div><div class="value" id="pred-kpi-habis">—</div><div class="delta" style="color:#b91c1c;">segera restock</div></div>
+        <div class="stat glass"><div class="label">Kritis &lt;10 hari</div><div class="value" id="pred-kpi-krit">—</div><div class="delta" style="color:#b45309;">prioritas tinggi</div></div>
+        <div class="stat glass"><div class="label">Waspada 10–14 hari</div><div class="value" id="pred-kpi-wasp">—</div><div class="delta" style="color:#0369a1;">pantau</div></div>
+        <div class="stat glass"><div class="label">Saran reorder</div><div class="value" id="pred-kpi-po">—</div><div class="delta">item butuh PO</div></div>
+      </div>
+      <div class="split-grid pred-split">
+        <div>
+          <div class="panel-title">Risiko Stok 7–14 Hari <small id="pred-sub">live dari stock depo</small></div>
+          <div class="pred-filters" id="pred-filters"></div>
+          <div class="glass" style="padding:8px 4px; overflow-x:auto;">
+            <table class="stok-table" id="pred-table"><thead>
+              <tr><th>Obat</th><th>Stock</th><th>Pakai/hr</th><th>ETA habis</th><th>Saran PO</th><th>Risiko</th></tr>
+            </thead><tbody id="pred-body"></tbody></table>
+          </div>
+        </div>
+        <div>
+          <div class="panel-title">Detail Prediksi <small id="pred-det-sub">pilih obat</small></div>
+          <div class="form-card glass">
+            <div id="pred-empty" class="cppt-empty" style="padding:36px 16px;">
+              <div class="ce-ico">📈</div>
+              <b>Pilih obat di tabel</b>
+              <small>Lihat tren pemakaian 14 hari (simulasi), ETA habis, dan saran jumlah reorder.</small>
+            </div>
+            <div id="pred-detail" style="display:none;">
+              <div class="pcard" style="margin-bottom:10px;">
+                <div class="pcard-info"><b id="pred-d-nama">—</b><small id="pred-d-meta">—</small></div>
+                <div class="pcard-side"><span class="badge" id="pred-d-risk">—</span></div>
+              </div>
+              <label class="sec-lbl">TREN PEMAKAIAN 14 HARI (simulasi)</label>
+              <div class="pred-chart-wrap">
+                <div class="pred-chart-legend">
+                  <span><i class="ok"></i> Normal</span>
+                  <span><i class="warn"></i> Di atas rata-rata</span>
+                  <span><i class="crit"></i> Lonjakan</span>
+                  <span>Angka di atas batang = pcs/hari</span>
+                </div>
+                <div class="pred-spark" id="pred-spark" role="img" aria-label="Grafik pemakaian 14 hari"></div>
+              </div>
+              <div class="pred-insight" id="pred-insight"></div>
+              <div class="pred-actions">
+                <button class="btn" id="pred-to-terima">📥 Ke Penerimaan</button>
+                <button class="btn ghost" id="pred-to-stok">📦 Kartu Stok</button>
+              </div>
             </div>
           </div>
         </div>
@@ -1793,40 +2035,95 @@
   <!-- ================= RME ================= -->
   <section class="screen" id="screen-rme">
     <div class="screen-head"><button class="back" data-goto="home">←</button><h2>Rekam Medis (RME)</h2></div>
-    <div class="rme-search" id="rme-search-wrap">
-      <div class="search glass">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#334155" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-        <input id="rme-q" placeholder="Cari pasien — No. RM / NIK / nama…" autocomplete="off">
-      </div>
-    </div>
-    <div class="rme-hits glass q-list" id="rme-hits" style="display:none; margin-bottom:14px;"></div>
-
-    <div id="rme-empty" class="rme-empty-big glass">
-      <div class="ce-ico">📁</div>
-      <b style="color:var(--text); display:block; margin-bottom:6px;">Cari pasien untuk membuka RME</b>
-      <small>Contoh: <b>Rina</b>, <b>RM-0004</b>, atau NIK 16 digit. Profil 360° + timeline kunjungan.</small>
-      <div style="margin-top:16px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center;">
-        <button class="btn ghost" type="button" onclick="openRme('RM-0004')">Rina Marlina</button>
-        <button class="btn ghost" type="button" onclick="openRme('RM-0001')">Budi Hartono</button>
-        <button class="btn ghost" type="button" onclick="openRme('RM-0002')">Sari Dewanti</button>
-      </div>
+    <div class="mode-toggle" id="rme-tabs">
+      <button class="mt-btn active" data-rme="pasien">👤 Pasien & Timeline</button>
+      <button class="mt-btn" data-rme="tren">📈 Tren Penyakit</button>
     </div>
 
-    <div id="rme-body" style="display:none;">
-      <div class="glass rme-header" id="rme-header"></div>
-      <div class="ri-filters" id="rme-filters" style="margin-bottom:12px;"></div>
-      <div class="rme-layout">
-        <div class="rme-col">
-          <div class="panel-title">Timeline <small id="rme-tl-count"></small></div>
-          <div class="timeline glass" id="rme-timeline"></div>
+    <div id="rme-view-pasien">
+      <div class="rme-search" id="rme-search-wrap">
+        <div class="search glass">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#334155" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input id="rme-q" placeholder="Cari pasien — No. RM / NIK / nama…" autocomplete="off">
         </div>
-        <div class="rme-col">
-          <div class="panel-title">Detail Kunjungan <small id="rme-det-sub">pilih di timeline</small></div>
-          <div class="form-card glass rme-detail" id="rme-detail"></div>
+      </div>
+      <div class="rme-hits glass q-list" id="rme-hits" style="display:none; margin-bottom:14px;"></div>
+
+      <div id="rme-empty" class="rme-empty-big glass">
+        <div class="ce-ico">📁</div>
+        <b style="color:var(--text); display:block; margin-bottom:6px;">Cari pasien untuk membuka RME</b>
+        <small>Contoh: <b>Rina</b>, <b>RM-0004</b>, atau NIK 16 digit. Profil 360° + timeline kunjungan.</small>
+        <div style="margin-top:16px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center;">
+          <button class="btn ghost" type="button" onclick="openRme('RM-0004')">Rina Marlina</button>
+          <button class="btn ghost" type="button" onclick="openRme('RM-0001')">Budi Hartono</button>
+          <button class="btn ghost" type="button" onclick="openRme('RM-0002')">Sari Dewanti</button>
         </div>
-        <div class="rme-col">
-          <div class="panel-title">Ringkasan</div>
-          <div class="glass sum-list" id="rme-sum"></div>
+      </div>
+
+      <div id="rme-body" style="display:none;">
+        <div class="glass rme-header" id="rme-header"></div>
+        <div class="ri-filters" id="rme-filters" style="margin-bottom:12px;"></div>
+        <div class="rme-layout">
+          <div class="rme-col">
+            <div class="panel-title">Timeline <small id="rme-tl-count"></small></div>
+            <div class="timeline glass" id="rme-timeline"></div>
+          </div>
+          <div class="rme-col">
+            <div class="panel-title">Detail Kunjungan <small id="rme-det-sub">pilih di timeline</small></div>
+            <div class="form-card glass rme-detail" id="rme-detail"></div>
+          </div>
+          <div class="rme-col">
+            <div class="panel-title">Ringkasan</div>
+            <div class="glass sum-list" id="rme-sum"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="rme-view-tren" style="display:none;">
+      <div class="dx-disc">
+        <span>ℹ</span>
+        <div><b>Estimasi simulasi</b> — perbandingan kasus ICD 30 hari terakhir vs 30 hari sebelumnya. Bukan diagnosis otomatis; untuk perencanaan layanan & stok obat terkait.</div>
+      </div>
+      <div class="dx-kpi">
+        <div class="stat glass"><div class="label">ICD dipantau</div><div class="value" id="dx-kpi-all">—</div><div class="delta">seed POC</div></div>
+        <div class="stat glass"><div class="label">Naik</div><div class="value" id="dx-kpi-up">—</div><div class="delta" style="color:#b91c1c;">vs periode lalu</div></div>
+        <div class="stat glass"><div class="label">Turun</div><div class="value" id="dx-kpi-down">—</div><div class="delta" style="color:#15803d;">vs periode lalu</div></div>
+        <div class="stat glass"><div class="label">Lonjakan ≥30%</div><div class="value" id="dx-kpi-hot">—</div><div class="delta" style="color:#c2410c;">perlu perhatian</div></div>
+      </div>
+      <div class="split-grid pred-split">
+        <div>
+          <div class="panel-title">Peringkat Tren ICD <small id="dx-sub">30 hari</small></div>
+          <div class="pred-filters" id="dx-filters"></div>
+          <div class="glass" style="padding:8px 4px; overflow-x:auto;">
+            <table class="dx-table" id="dx-table"><thead>
+              <tr><th>ICD</th><th>30 hr ini</th><th>30 hr lalu</th><th>Perubahan</th><th>Status</th></tr>
+            </thead><tbody id="dx-body"></tbody></table>
+          </div>
+        </div>
+        <div>
+          <div class="panel-title">Detail Tren <small id="dx-det-sub">pilih ICD</small></div>
+          <div class="form-card glass">
+            <div id="dx-empty" class="cppt-empty" style="padding:36px 16px;">
+              <div class="ce-ico">📈</div>
+              <b>Pilih diagnosa di tabel</b>
+              <small>Lihat pola 8 minggu, insight singkat, dan obat terkait di Prediksi Stok.</small>
+            </div>
+            <div id="dx-detail" style="display:none;">
+              <div class="pcard" style="margin-bottom:10px;">
+                <div class="pcard-info"><b id="dx-d-kode">—</b><small id="dx-d-nama">—</small></div>
+                <div class="pcard-side"><span class="badge" id="dx-d-badge">—</span></div>
+              </div>
+              <label class="sec-lbl">KASUS 8 MINGGU TERAKHIR (simulasi)</label>
+              <div class="dx-sparkline" id="dx-spark"></div>
+              <div class="pred-insight" id="dx-insight" style="margin-top:12px;"></div>
+              <label class="sec-lbl" style="margin-top:14px;">OBAT TERKAIT — buka Prediksi Stok</label>
+              <div class="dx-obat-list" id="dx-obat"></div>
+              <div class="pred-actions">
+                <button class="btn" id="dx-to-farmasi">📈 Ke Prediksi Stok</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1966,7 +2263,9 @@
   function show(name) {
     screens.forEach(s => s.classList.remove('active'));
     document.getElementById('screen-' + name).classList.add('active');
-    document.querySelector('.app').classList.toggle('wide', name !== 'home');
+    const appEl = document.querySelector('.app');
+    appEl.classList.toggle('wide', name !== 'home');
+    appEl.classList.toggle('home-wide', name === 'home');
     window.scrollTo({ top: 0, behavior: 'smooth' });
     /* Simulasi: masuk Pelayanan Poli → pasien Dipanggil pertama langsung dimuat */
     if (name === 'poli' && !cpptPasien) {
@@ -1977,7 +2276,8 @@
     if (name === 'farmasi') renderFarmasi();
     if (name === 'kasir') renderKasir();
     if (name === 'ranap') renderRI();
-    if (name === 'rme') renderRme();
+    if (name === 'rme') renderRmeScreen();
+    if (name === 'home' && typeof renderDxHome === 'function') renderDxHome();
     if (name === 'jadwal' && typeof window.renderJadwal === 'function') window.renderJadwal();
     if (name === 'master' && typeof window.renderMaster === 'function') window.renderMaster();
     if (name === 'igd' && typeof window.renderIgd === 'function') window.renderIgd();
@@ -4414,6 +4714,14 @@
     'Paracetamol 500mg tablet':80, 'Amoxicillin 500mg kapsul':60, 'ORS sachet':50,
     'Omeprazole 20mg kapsul':40, 'Ceftriaxone 1g inj':20,
   };
+  /* Rata-rata pemakaian harian (seed POC) — dipakai forecast ETA */
+  const STOK_USAGE_DAY = {
+    'Paracetamol 500mg tablet':18, 'Ibuprofen 400mg tablet':6, 'Amoxicillin 500mg kapsul':9,
+    'Penisilin G 1.2 jt IU inj':2, 'Ceftriaxone 1g inj':4, 'Cetirizine 10mg tablet':5,
+    'CTM 4mg tablet':4, 'Omeprazole 20mg kapsul':7, 'Antasida sirup 200ml':3,
+    'ORS sachet':8, 'Salbutamol inhaler':2, 'Vitamin B kompleks tablet':4,
+    'Gentamicin salep 5g':1.5, 'Ambroxol 30mg tablet':5, 'Domperidone 10mg tablet':3,
+  };
   const STOK = OBAT.map(nama => ({
     nama, saldo: STOK_SEED[nama] ?? 100, min: STOK_MIN[nama] ?? 40, harga: HARGA_OBAT[nama] || 5000
   }));
@@ -4440,6 +4748,7 @@
       rx:[{ obat:'Ceftriaxone 1g inj', qty:3, signa:'1×1 IV' }, { obat:'Paracetamol 500mg tablet', qty:10, signa:'3×1 sehari' }] },
   ];
   let fqSel = null, fqView = 'antrian', fqSrc = 'all', fqMutasiObat = null;
+  let predFilter = 'all', predSel = null;
   const fqStLbl = { Antri:'Antri', Verif:'Verifikasi', Racik:'Diracik', Selesai:'Selesai' };
   const fqStBadge = { Antri:'b-antri', Verif:'b-verif', Racik:'b-diperiksa', Selesai:'b-selesai' };
   const fqStOrd = { Verif:0, Antri:1, Racik:2, Selesai:3 };
@@ -4466,10 +4775,175 @@
     document.querySelectorAll('#fq-tabs .mt-btn').forEach(b => b.classList.toggle('active', b.dataset.fq === fqView));
     $f('fq-view-antrian').style.display = fqView === 'antrian' ? '' : 'none';
     $f('fq-view-stok').style.display = fqView === 'stok' ? '' : 'none';
+    $f('fq-view-prediksi').style.display = fqView === 'prediksi' ? '' : 'none';
     $f('fq-view-terima').style.display = fqView === 'terima' ? '' : 'none';
     if (fqView === 'antrian') { fqSrcFilters(); renderFQ(); if (fqSel) loadFQ(fqSel); else if (!fqSel) { const q = FQ.find(x => x.st !== 'Selesai'); if (q) loadFQ(q); } }
     if (fqView === 'stok') renderStok();
+    if (fqView === 'prediksi') renderPrediksiStok();
     if (fqView === 'terima') renderTerima();
+  }
+
+  function predUsageOf(nama) {
+    const seed = STOK_USAGE_DAY[nama];
+    if (seed != null) return seed;
+    const out = MUTASI.filter(m => m.obat === nama && m.dir === 'keluar');
+    if (out.length) {
+      const total = out.reduce((a, m) => a + m.qty, 0);
+      return Math.max(0.5, +(total / Math.max(out.length * 2, 1)).toFixed(1));
+    }
+    const s = stokOf(nama);
+    return s ? Math.max(1, +(s.min / 10).toFixed(1)) : 1;
+  }
+  function predForecast(s) {
+    const usage = predUsageOf(s.nama);
+    const days = usage <= 0 ? Infinity : s.saldo / usage;
+    const coverDays = 14;
+    const target = Math.max(s.min * 2, Math.ceil(usage * coverDays));
+    const reorder = Math.max(0, target - s.saldo);
+    /* Risiko mengikuti ETA: Habis → Kritis (<10 hr) → Waspada (10–14) → Aman (>14) */
+    let risk = 'Aman', riskKey = 'aman', etaCls = 'ok';
+    if (s.saldo <= 0 || days === 0) {
+      risk = 'Habis'; riskKey = 'habis'; etaCls = 'crit';
+    } else if (isFinite(days) && days < 10) {
+      risk = 'Kritis'; riskKey = 'kritis'; etaCls = 'crit';
+    } else if (isFinite(days) && days <= 14) {
+      risk = 'Waspada'; riskKey = 'waspada'; etaCls = 'warn';
+    }
+    const etaLbl = !isFinite(days) ? '—'
+      : days <= 0 ? '0 hari'
+      : days < 1 ? '<1 hari'
+      : days > 14 ? `>${14} hari`
+      : `${Math.ceil(days)} hari`;
+    return { usage, days, reorder, risk, riskKey, etaCls, etaLbl, target };
+  }
+  function predSparkSeries(nama, usage, saldo) {
+    /* Simulasi 14 hari ke belakang: pemakaian harian ± noise, stok mundur dari saldo saat ini */
+    const bars = [];
+    let cursor = saldo;
+    for (let i = 13; i >= 0; i--) {
+      const noise = 0.65 + ((nama.length * 17 + i * 13) % 70) / 100;
+      const u = Math.max(0, +(usage * noise).toFixed(1));
+      bars.unshift(u);
+      cursor += u; // reverse: kemarin stok lebih tinggi
+    }
+    return bars;
+  }
+  function predRiskBadge(risk) {
+    if (risk === 'Habis' || risk === 'Kritis') return 'b-belum';
+    if (risk === 'Waspada') return 'b-antri';
+    return 'b-selesai';
+  }
+  function renderPrediksiStok() {
+    if (!$f('pred-body')) return;
+    const rows = STOK.map(s => ({ s, f: predForecast(s) }))
+      .sort((a, b) => (a.f.days - b.f.days) || (a.s.saldo - b.s.saldo));
+    const nHabis = rows.filter(r => r.f.riskKey === 'habis').length;
+    const nKrit = rows.filter(r => r.f.riskKey === 'kritis').length;
+    const nWasp = rows.filter(r => r.f.riskKey === 'waspada').length;
+    const nPo = rows.filter(r => r.f.reorder > 0 && r.f.days <= 14).length;
+    $f('pred-kpi-habis').textContent = nHabis;
+    $f('pred-kpi-krit').textContent = nKrit;
+    $f('pred-kpi-wasp').textContent = nWasp;
+    $f('pred-kpi-po').textContent = nPo;
+    $f('pred-sub').textContent = `${nKrit + nHabis} prioritas · ${STOK.length} item · dari stock depo`;
+
+    const filters = [
+      { id:'all', label:`Semua (${rows.length})` },
+      { id:'prioritas', label:`Prioritas (${nHabis + nKrit + nWasp})` },
+      { id:'po', label:`Perlu PO (${nPo})` },
+      { id:'aman', label:'Aman' },
+    ];
+    $f('pred-filters').innerHTML = filters.map(t =>
+      `<span class="chip${predFilter === t.id ? ' on' : ''}" data-pf="${t.id}">${t.label}</span>`).join('');
+    $f('pred-filters').querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+      predFilter = c.dataset.pf; renderPrediksiStok();
+    }));
+
+    const filtered = rows.filter(r => {
+      if (predFilter === 'prioritas') return r.f.riskKey !== 'aman';
+      if (predFilter === 'po') return r.f.reorder > 0 && r.f.days <= 14;
+      if (predFilter === 'aman') return r.f.riskKey === 'aman';
+      return true;
+    });
+    $f('pred-body').innerHTML = filtered.length ? filtered.map(({ s, f }) => {
+      const rowCls = f.riskKey === 'habis' ? 'habis' : f.riskKey === 'kritis' ? 'krit' : f.riskKey === 'waspada' ? 'waspada' : '';
+      const sel = predSel === s.nama ? ' pred-sel' : '';
+      return `<tr class="${rowCls}${sel}" data-pred="${s.nama}">
+        <td><b style="font-size:.8rem;">${s.nama}</b></td>
+        <td class="num">${s.saldo}</td>
+        <td class="num" style="color:var(--muted)">${f.usage}</td>
+        <td class="pred-eta ${f.etaCls}">${f.etaLbl}</td>
+        <td class="num">${f.reorder > 0 ? f.reorder : '—'}</td>
+        <td><span class="badge ${predRiskBadge(f.risk)}">${f.risk}</span></td>
+      </tr>`;
+    }).join('') : '<tr><td colspan="6" style="color:var(--muted);padding:16px;">Tidak ada item di filter ini.</td></tr>';
+
+    $f('pred-body').querySelectorAll('tr[data-pred]').forEach(tr => {
+      tr.addEventListener('click', () => showPredDetail(tr.dataset.pred));
+    });
+    if (predSel && STOK.some(s => s.nama === predSel)) showPredDetail(predSel);
+    else if (!predSel && filtered[0]) showPredDetail(filtered[0].s.nama);
+    else if (!filtered.length) {
+      $f('pred-empty').style.display = '';
+      $f('pred-detail').style.display = 'none';
+      predSel = null;
+    }
+  }
+  function showPredDetail(nama) {
+    const s = stokOf(nama);
+    if (!s) return;
+    predSel = nama;
+    const f = predForecast(s);
+    $f('pred-empty').style.display = 'none';
+    $f('pred-detail').style.display = '';
+    $f('pred-det-sub').textContent = f.etaLbl + ' · ' + f.risk;
+    $f('pred-d-nama').textContent = nama;
+    $f('pred-d-meta').textContent = `Stock ${s.saldo} · Min ${s.min} · Target cover 14 hr ≈ ${f.target} pcs`;
+    const badge = $f('pred-d-risk');
+    badge.textContent = f.risk;
+    badge.className = 'badge ' + predRiskBadge(f.risk);
+
+    const series = predSparkSeries(nama, f.usage, s.saldo);
+    const maxU = Math.max(...series, 0.1);
+    $f('pred-spark').innerHTML = series.map((u, idx) => {
+      const h = Math.max(14, Math.round((u / maxU) * 100));
+      const cls = u >= f.usage * 1.25 ? 'crit' : u >= f.usage * 1.05 ? 'warn' : '';
+      const day = idx === 13 ? 'H' : `-${13 - idx}`;
+      const val = Number.isInteger(u) ? u : u.toFixed(1);
+      return `<div class="bar" title="Hari ${day}: ${val} pcs">
+        <b class="${cls}">${val}</b>
+        <i class="${cls}" style="height:${h}%"></i>
+        <small>${day}</small>
+      </div>`;
+    }).join('');
+
+    const tips = [];
+    if (f.riskKey === 'habis') tips.push('Stock habis — catat penerimaan segera agar dispensing tidak terblokir.');
+    else if (f.riskKey === 'kritis') tips.push(`ETA habis ~${f.etaLbl}. Prioritaskan PO / mutasi masuk.`);
+    else if (f.riskKey === 'waspada') tips.push('Masih cukup singkat; pantau 7 hari ke depan.');
+    else tips.push('Stock relatif aman pada pola pemakaian saat ini.');
+    if (f.reorder > 0) tips.push(`Saran reorder <b>${f.reorder} pcs</b> agar mendekati target cover 14 hari / 2× minimum.`);
+    else tips.push('Tidak ada saran reorder (stock sudah di atas target POC).');
+    tips.push('Angka bersifat <b>estimasi simulasi</b> — validasi dengan kartu stok & rencana pengadaan.');
+    $f('pred-insight').innerHTML = `<ul style="margin:0;padding:0;list-style:disc;">${tips.map(t => `<li>${t}</li>`).join('')}</ul>`;
+
+    $f('pred-body').querySelectorAll('tr[data-pred]').forEach(tr => {
+      tr.classList.toggle('pred-sel', tr.dataset.pred === nama);
+    });
+  }
+  if ($f('pred-to-terima')) {
+    $f('pred-to-terima').addEventListener('click', () => {
+      if (predSel) {
+        gotoFq('terima');
+        setTimeout(() => { const el = $f('tr-obat'); if (el) { el.value = predSel; el.focus(); } }, 50);
+      } else gotoFq('terima');
+    });
+  }
+  if ($f('pred-to-stok')) {
+    $f('pred-to-stok').addEventListener('click', () => {
+      if (predSel) fqMutasiObat = predSel;
+      gotoFq('stok');
+    });
   }
   function fqSrcFilters() {
     const tabs = [{ id:'all', label:'Semua' }, { id:'ralan', label:'Rawat Jalan' }, { id:'ranap', label:'Rawat Inap' }];
@@ -4561,7 +5035,7 @@
     }).join('');
     let note = '';
     if (al) note += `<div class="rx-warn">⚠ Pasien alergi <b>${info.alergi.join(', ')}</b> — item merah = golongan alergen.</div>`;
-    if (stockIssues.length && q.st !== 'Selesai') note += `<div class="rx-warn" style="background:#ffedd5;color:#c2410c;">⚠ Stok kurang: ${stockIssues.map(x => x.obat).join(', ')}. Tetap bisa verif; serah akan menolak jika saldo tidak cukup.</div>`;
+    if (stockIssues.length && q.st !== 'Selesai') note += `<div class="rx-warn" style="background:#ffedd5;color:#c2410c;">⚠ Stok kurang: ${stockIssues.map(x => x.obat).join(', ')}. Tetap bisa verif; serah akan menolak jika stock tidak cukup.</div>`;
     $f('fq-note').innerHTML = note;
     fqBtn();
     renderFQ();
@@ -4597,7 +5071,7 @@
     if (q.st === 'Racik' && q.rx.every(r => r.ok)) {
       const ded = fqDeductStock(q);
       if (!ded.ok) {
-        openModal({ title:'Stok Tidak Cukup', html:`<div class="mstatus">⚠ <b>${ded.obat}</b> — butuh ${ded.perlu}, saldo ${ded.ada}.<br>
+        openModal({ title:'Stok Tidak Cukup', html:`<div class="mstatus">⚠ <b>${ded.obat}</b> — butuh ${ded.perlu}, stock ${ded.ada}.<br>
           <small>Catat penerimaan dulu, atau kurangi qty lewat dokter.</small></div>
           <div class="modal-foot"><button class="btn-primary" onclick="closeModal(); gotoFq('terima')">Ke Penerimaan</button>
           <button class="btn-primary" onclick="closeModal()" style="background:#64748b;">Tutup</button></div>` });
@@ -4665,12 +5139,12 @@
     $f('fq-mutasi-obat').textContent = nama.split(' ').slice(0, 2).join(' ');
     $f('fq-m-nama').textContent = nama;
     $f('fq-m-meta').textContent = `Min ${s.min} · Harga Rp ${s.harga.toLocaleString('id-ID')}`;
-    $f('fq-m-saldo').textContent = 'Saldo ' + s.saldo;
+    $f('fq-m-saldo').textContent = 'Stock ' + s.saldo;
     const rows = MUTASI.filter(m => m.obat === nama);
     $f('fq-mutasi-list').innerHTML = rows.length ? rows.map(m => `
       <div class="mutasi-item">
         <span class="m-dir ${m.dir === 'masuk' ? 'in' : 'out'}">${m.dir === 'masuk' ? '+ IN' : '− OUT'}</span>
-        <div style="flex:1;min-width:0;"><b>${m.qty} pcs</b> · saldo ${m.saldo}<br><small style="color:var(--muted)">${m.tgl} · ${m.ket}</small></div>
+        <div style="flex:1;min-width:0;"><b>${m.qty} pcs</b> · stock ${m.saldo}<br><small style="color:var(--muted)">${m.tgl} · ${m.ket}</small></div>
       </div>`).join('') : '<small style="color:var(--muted)">Belum ada mutasi untuk obat ini.</small>';
   }
 
@@ -4705,7 +5179,7 @@
     $f('tr-obat').value = ''; $f('tr-qty').value = ''; $f('tr-faktur').value = ''; $f('tr-ket').value = '';
     fqKpi(); renderTerima();
     openModal({ title:'Penerimaan Tercatat', html:`<div class="mstatus">📥 <b>${obat}</b> +${qty}<br>
-      <small>Saldo sekarang <b>${s.saldo}</b> · ${faktur}</small></div>
+      <small>Stock sekarang <b>${s.saldo}</b> · ${faktur}</small></div>
       <div class="modal-foot"><button class="btn-primary" onclick="closeModal(); gotoFq('stok')">Lihat Stok</button>
       <button class="btn-primary" onclick="closeModal()" style="background:#64748b;">OK</button></div>` });
   });
@@ -4720,11 +5194,416 @@
   window.gotoFq = (v) => { fqView = v; renderFarmasi(); };
   fqKpi();
 
-  /* ===== RME — profil 360° + timeline ===== */
+  /* ===== RME — profil 360° + timeline + tren penyakit ===== */
   let rmePasien = null, rmeVisit = null, rmeFilter = 'all';
+  let rmeView = 'pasien', dxFilter = 'all', dxSel = null;
   const rmeTipeLbl = { ralan:'Rawat Jalan', ranap:'Rawat Inap', igd:'IGD' };
   const rmeTipeBadge = { ralan:'b-ralan', ranap:'b-ranap', igd:'b-igd' };
   const rmePjLbl = { umum:'Umum', bpjs:'BPJS Kesehatan', asuransi:'Asuransi' };
+
+  /* Seed tren ICD (simulasi 30 hari vs 30 hari lalu) + obat terkait Prediksi Stok */
+  const DISEASE_TREND = [
+    { k:'J06.9', n:'ISPA atas akut', now:48, prev:31, weeks:[18,20,22,24,28,32,40,48],
+      obat:['Paracetamol 500mg tablet','CTM 4mg tablet','Ambroxol 30mg tablet'] },
+    { k:'A01.0', n:'Demam tifoid', now:22, prev:14, weeks:[8,9,10,11,12,14,18,22],
+      obat:['Ceftriaxone 1g inj','Paracetamol 500mg tablet','Amoxicillin 500mg kapsul'] },
+    { k:'A09', n:'Diare & gastroenteritis', now:27, prev:19, weeks:[12,13,14,15,16,18,22,27],
+      obat:['ORS sachet','Domperidone 10mg tablet'] },
+    { k:'A90', n:'Dengue (DBD)', now:9, prev:15, weeks:[16,14,13,12,11,10,9,9],
+      obat:['Paracetamol 500mg tablet','ORS sachet'] },
+    { k:'K29.7', n:'Gastritis', now:21, prev:20, weeks:[19,20,19,21,20,20,21,21],
+      obat:['Omeprazole 20mg kapsul','Antasida sirup 200ml'] },
+    { k:'I10', n:'Hipertensi esensial', now:35, prev:33, weeks:[30,31,32,32,33,34,34,35],
+      obat:['Vitamin B kompleks tablet'] },
+    { k:'J45.9', n:'Asma, tidak spesifik', now:11, prev:8, weeks:[6,6,7,7,8,9,10,11],
+      obat:['Salbutamol inhaler'] },
+    { k:'N39.0', n:'Infeksi saluran kemih', now:14, prev:12, weeks:[10,10,11,11,12,12,13,14],
+      obat:['Amoxicillin 500mg kapsul','Ceftriaxone 1g inj'] },
+  ];
+
+  function dxChange(row) {
+    if (!row.prev) return { pct: row.now ? 100 : 0, dir: row.now > 0 ? 'up' : 'flat', label: '—' };
+    const pct = ((row.now - row.prev) / row.prev) * 100;
+    const dir = Math.abs(pct) < 5 ? 'flat' : pct > 0 ? 'up' : 'down';
+    const label = (pct > 0 ? '+' : '') + pct.toFixed(0) + '%';
+    return { pct, dir, label };
+  }
+  function dxStatus(row) {
+    const { pct, dir } = dxChange(row);
+    if (dir === 'up' && pct >= 30) return { text:'Lonjakan', key:'hot', badge:'b-belum' };
+    if (dir === 'up') return { text:'Naik', key:'up', badge:'b-antri' };
+    if (dir === 'down') return { text:'Turun', key:'down', badge:'b-selesai' };
+    return { text:'Stabil', key:'flat', badge:'b-diperiksa' };
+  }
+  function renderRmeScreen() {
+    document.querySelectorAll('#rme-tabs .mt-btn').forEach(b => b.classList.toggle('active', b.dataset.rme === rmeView));
+    $f('rme-view-pasien').style.display = rmeView === 'pasien' ? '' : 'none';
+    $f('rme-view-tren').style.display = rmeView === 'tren' ? '' : 'none';
+    if (rmeView === 'pasien') renderRme();
+    if (rmeView === 'tren') renderDiseaseTrend();
+  }
+  function gotoRmeTren(kode) {
+    rmeView = 'tren';
+    if (kode) dxSel = kode;
+    show('rme');
+    renderRmeScreen();
+  }
+  window.gotoRmeTren = gotoRmeTren;
+
+  function renderDiseaseTrend() {
+    if (!$f('dx-body')) return;
+    const rows = DISEASE_TREND.map(r => ({ r, ch: dxChange(r), st: dxStatus(r) }))
+      .sort((a, b) => b.ch.pct - a.ch.pct);
+    const nUp = rows.filter(x => x.ch.dir === 'up').length;
+    const nDown = rows.filter(x => x.ch.dir === 'down').length;
+    const nHot = rows.filter(x => x.st.key === 'hot').length;
+    $f('dx-kpi-all').textContent = rows.length;
+    $f('dx-kpi-up').textContent = nUp;
+    $f('dx-kpi-down').textContent = nDown;
+    $f('dx-kpi-hot').textContent = nHot;
+    $f('dx-sub').textContent = `${nHot} lonjakan · ${nUp} naik · ${nDown} turun`;
+
+    const filters = [
+      { id:'all', label:`Semua (${rows.length})` },
+      { id:'up', label:`Naik (${nUp})` },
+      { id:'hot', label:`Lonjakan (${nHot})` },
+      { id:'down', label:`Turun (${nDown})` },
+    ];
+    $f('dx-filters').innerHTML = filters.map(t =>
+      `<span class="chip${dxFilter === t.id ? ' on' : ''}" data-df="${t.id}">${t.label}</span>`).join('');
+    $f('dx-filters').querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+      dxFilter = c.dataset.df; renderDiseaseTrend();
+    }));
+
+    const filtered = rows.filter(x => {
+      if (dxFilter === 'up') return x.ch.dir === 'up';
+      if (dxFilter === 'down') return x.ch.dir === 'down';
+      if (dxFilter === 'hot') return x.st.key === 'hot';
+      return true;
+    });
+    $f('dx-body').innerHTML = filtered.length ? filtered.map(({ r, ch, st }) => `
+      <tr class="${st.key === 'hot' ? 'hot' : ''}${dxSel === r.k ? ' dx-sel' : ''}" data-dx="${r.k}">
+        <td><b>${r.k}</b><div style="font-size:.72rem;color:var(--muted);margin-top:2px;">${r.n}</div></td>
+        <td class="num">${r.now}</td>
+        <td class="num" style="color:var(--muted)">${r.prev}</td>
+        <td><span class="dx-chg ${ch.dir}">${ch.label}</span></td>
+        <td><span class="badge ${st.badge}">${st.text}</span></td>
+      </tr>`).join('') : '<tr><td colspan="5" style="color:var(--muted);padding:16px;">Tidak ada item di filter ini.</td></tr>';
+
+    $f('dx-body').querySelectorAll('tr[data-dx]').forEach(tr => {
+      tr.addEventListener('click', () => showDxDetail(tr.dataset.dx));
+    });
+    if (dxSel && DISEASE_TREND.some(x => x.k === dxSel)) showDxDetail(dxSel);
+    else if (filtered[0]) showDxDetail(filtered[0].r.k);
+    else {
+      dxSel = null;
+      $f('dx-empty').style.display = '';
+      $f('dx-detail').style.display = 'none';
+    }
+  }
+  function showDxDetail(kode) {
+    const r = DISEASE_TREND.find(x => x.k === kode);
+    if (!r) return;
+    dxSel = kode;
+    const ch = dxChange(r);
+    const st = dxStatus(r);
+    $f('dx-empty').style.display = 'none';
+    $f('dx-detail').style.display = '';
+    $f('dx-det-sub').textContent = ch.label + ' · ' + st.text;
+    $f('dx-d-kode').textContent = r.k;
+    $f('dx-d-nama').textContent = r.n + ` · ${r.now} kasus (30 hr) vs ${r.prev} sebelumnya`;
+    const badge = $f('dx-d-badge');
+    badge.textContent = st.text;
+    badge.className = 'badge ' + st.badge;
+
+    const maxW = Math.max(...r.weeks, 1);
+    $f('dx-spark').innerHTML = r.weeks.map((v, i) => {
+      const h = Math.max(12, Math.round((v / maxW) * 100));
+      const last = i === r.weeks.length - 1;
+      return `<div class="bar" title="Minggu ${i + 1}: ${v} kasus">
+        <i class="${last ? 'now' : ''}" style="height:${h}%"></i>
+        <small>M${i + 1}</small>
+      </div>`;
+    }).join('');
+
+    const tips = [];
+    if (st.key === 'hot') tips.push(`Lonjakan <b>${ch.label}</b> — evaluasi kapasitas poli terkait & ketersediaan obat.`);
+    else if (ch.dir === 'up') tips.push(`Tren naik <b>${ch.label}</b> dibanding 30 hari sebelumnya.`);
+    else if (ch.dir === 'down') tips.push(`Tren turun <b>${ch.label}</b> — pantau apakah musiman atau pergeseran pola.`);
+    else tips.push('Volume relatif stabil vs periode sebelumnya.');
+    tips.push('Angka bersifat <b>estimasi simulasi</b> POC — bukan klaim epidemiologi resmi.');
+    $f('dx-insight').innerHTML = `<ul style="margin:0;padding:0;list-style:disc;">${tips.map(t => `<li>${t}</li>`).join('')}</ul>`;
+
+    $f('dx-obat').innerHTML = (r.obat || []).map(o =>
+      `<button type="button" class="dx-obat-chip" data-obat="${o}">${o}</button>`).join('')
+      || '<small style="color:var(--muted)">Belum ada mapping obat.</small>';
+    $f('dx-obat').querySelectorAll('[data-obat]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (typeof predSel !== 'undefined') predSel = btn.dataset.obat;
+        if (typeof fqView !== 'undefined') fqView = 'prediksi';
+        show('farmasi');
+        if (typeof renderFarmasi === 'function') renderFarmasi();
+      });
+    });
+
+    $f('dx-body').querySelectorAll('tr[data-dx]').forEach(tr => {
+      tr.classList.toggle('dx-sel', tr.dataset.dx === kode);
+    });
+  }
+  if ($f('dx-to-farmasi')) {
+    $f('dx-to-farmasi').addEventListener('click', () => {
+      const r = DISEASE_TREND.find(x => x.k === dxSel);
+      if (r && r.obat && r.obat[0] && typeof predSel !== 'undefined') predSel = r.obat[0];
+      if (typeof fqView !== 'undefined') fqView = 'prediksi';
+      show('farmasi');
+      if (typeof renderFarmasi === 'function') renderFarmasi();
+    });
+  }
+  document.querySelectorAll('#rme-tabs .mt-btn').forEach(btn => {
+    btn.addEventListener('click', () => { rmeView = btn.dataset.rme; renderRmeScreen(); });
+  });
+
+  let dxHomeSel = null;
+  let dxHomeAnimRaf = 0;
+  function dxForecastWeeks(weeks, n = 4) {
+    const m = weeks.length;
+    let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+    for (let i = 0; i < m; i++) {
+      sumX += i; sumY += weeks[i]; sumXY += i * weeks[i]; sumXX += i * i;
+    }
+    const den = m * sumXX - sumX * sumX;
+    const slope = den ? (m * sumXY - sumX * sumY) / den : 0;
+    const intercept = (sumY - slope * sumX) / m;
+    const out = [];
+    for (let i = 0; i < n; i++) {
+      out.push(Math.max(0, Math.round(intercept + slope * (m + i))));
+    }
+    return out;
+  }
+  function dxHomeForecastChart(row) {
+    const svg = document.getElementById('lc-dx-home');
+    const tip = document.getElementById('lc-dx-home-tip');
+    if (!svg || !row) return;
+    [...svg.children].forEach(c => { if (c.tagName.toLowerCase() !== 'defs') c.remove(); });
+
+    const hist = row.weeks.slice();
+    const fc = dxForecastWeeks(hist, 4);
+    const all = hist.concat(fc);
+    const labels = hist.map((_, i) => `M${i + 1}`).concat(fc.map((_, i) => `F${i + 1}`));
+    const split = hist.length - 1;
+
+    const small = matchMedia('(max-width:640px)').matches;
+    /* Tinggi menyesuaikan kolom KPI di kanan (side-by-side) */
+    const W = small ? 400 : 720, H = small ? 150 : 180, L = small ? 28 : 34, R = 8, T = 12, B = 22;
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    const plotW = W - L - R, plotH = H - T - B;
+    const max = Math.max(...all, 1);
+    const vmax = Math.ceil(max / 10) * 10 || 10;
+    const step = plotW / (all.length - 1);
+    const pts = all.map((v, i) => ({ x: L + i * step, y: T + (1 - v / vmax) * plotH, v, fc: i > split }));
+    const ns = 'http://www.w3.org/2000/svg';
+    const el = (n, a) => { const e = document.createElementNS(ns, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
+
+    for (let g = 0; g <= 3; g++) {
+      const y = T + (1 - g / 3) * plotH;
+      svg.appendChild(el('line', { x1: L, x2: W - R, y1: y, y2: y, stroke: 'rgba(15,23,42,.07)' }));
+      const tx = svg.appendChild(el('text', { x: L - 6, y: y + 3, 'text-anchor': 'end', 'font-size': '9', fill: '#94a3b8' }));
+      tx.textContent = Math.round(vmax * g / 3);
+    }
+    labels.forEach((lb, i) => {
+      const tx = svg.appendChild(el('text', {
+        x: pts[i].x, y: H - 5, 'text-anchor': 'middle', 'font-size': '9',
+        fill: pts[i].fc ? '#2563eb' : '#94a3b8', 'font-weight': pts[i].fc ? '700' : '600'
+      }));
+      tx.textContent = lb;
+    });
+
+    /* pemisah aktual | forecast */
+    const sx = pts[split].x;
+    const sep = el('line', {
+      x1: sx, x2: sx, y1: T, y2: T + plotH,
+      stroke: 'rgba(37,99,235,.45)', 'stroke-dasharray': '4 4', 'stroke-width': '1.2',
+      class: 'dx-fc-sep'
+    });
+    svg.appendChild(sep);
+
+    const histPts = pts.slice(0, split + 1);
+    const fcPts = pts.slice(split);
+    const histLine = smoothPath(histPts);
+    const fcLine = smoothPath(fcPts);
+    svg.appendChild(el('path', {
+      d: `${histLine}L${histPts[histPts.length - 1].x},${T + plotH}L${histPts[0].x},${T + plotH}Z`,
+      fill: 'url(#dxhomegrad)', class: 'dx-hist-area'
+    }));
+    svg.appendChild(el('path', {
+      d: histLine, fill: 'none', stroke: 'url(#dxhomeline)', 'stroke-width': '2.6',
+      'stroke-linecap': 'round', pathLength: '1', class: 'dx-hist-line'
+    }));
+    const fcPath = el('path', {
+      d: fcLine, fill: 'none', stroke: '#2563eb', 'stroke-width': '2.6',
+      'stroke-linecap': 'round', 'stroke-dasharray': '8 6', class: 'dx-fc-line'
+    });
+    svg.appendChild(fcPath);
+
+    const fcDots = [];
+    pts.forEach((p, i) => {
+      const delay = 0.55 + i * 0.07;
+      const c = el('circle', {
+        cx: p.x, cy: p.y, r: p.fc ? 3.8 : 3.4,
+        fill: '#fff', stroke: p.fc ? '#2563eb' : '#0d9488', 'stroke-width': '2',
+        class: p.fc ? 'dx-fc-dot' : 'dx-hist-dot',
+        style: p.fc ? '' : `animation-delay:${delay.toFixed(2)}s`
+      });
+      svg.appendChild(c);
+      if (p.fc) fcDots.push(c);
+    });
+
+    /* Titik forecast: bergerak + detak jantung (lub-dub) */
+    const runner = el('circle', {
+      r: '5.5', fill: '#e11d48', stroke: '#fff', 'stroke-width': '2.2',
+      opacity: '0.98', style: 'display:none; pointer-events:none;'
+    });
+    const runnerGlow = el('circle', {
+      r: '10', fill: 'rgba(225,29,72,.22)', style: 'display:none; pointer-events:none;'
+    });
+    const runnerRing = el('circle', {
+      r: '8', fill: 'none', stroke: '#e11d48', 'stroke-width': '2',
+      opacity: '0', style: 'display:none; pointer-events:none;'
+    });
+    svg.appendChild(runnerGlow);
+    svg.appendChild(runnerRing);
+    svg.appendChild(runner);
+
+    /* Envelope detak: 2 denyut cepat (lub-dub) lalu istirahat — ~72 bpm */
+    const heartBeat = (sec) => {
+      const cycle = 0.85;
+      const p = (sec % cycle) / cycle;
+      const spike = (x, peak, width) => {
+        const d = Math.abs(x - peak) / width;
+        return d >= 1 ? 0 : Math.pow(1 - d, 2);
+      };
+      return Math.min(1, spike(p, 0.12, 0.07) * 1.0 + spike(p, 0.28, 0.06) * 0.62);
+    };
+
+    /* Selalu hidupkan animasi forecast (POC pameran).
+       OS sering set prefers-reduced-motion=reduce — itu yang bikin “tidak bergerak”. */
+    if (dxHomeAnimRaf) cancelAnimationFrame(dxHomeAnimRaf);
+    const t0 = performance.now();
+    const tick = (now) => {
+      const t = (now - t0) / 1000;
+      const beat = heartBeat(t);
+      fcPath.setAttribute('stroke-dashoffset', String(-((t * 36) % 14)));
+      sep.setAttribute('stroke-dashoffset', String(-((t * 14) % 8)));
+      fcDots.forEach((c, i) => {
+        const soft = 0.35 + 0.65 * beat;
+        c.setAttribute('r', String(3.3 + soft * 1.8));
+        c.setAttribute('opacity', String(0.72 + soft * 0.28));
+      });
+      try {
+        const len = fcPath.getTotalLength();
+        if (len > 1) {
+          const u = (t * 0.28) % 1;
+          const pt = fcPath.getPointAtLength(u * len);
+          const rr = 4.6 + beat * 5.2;
+          const gr = 9 + beat * 14;
+          runner.setAttribute('cx', pt.x); runner.setAttribute('cy', pt.y);
+          runner.setAttribute('r', String(rr));
+          runner.setAttribute('opacity', String(0.85 + beat * 0.15));
+          runnerGlow.setAttribute('cx', pt.x); runnerGlow.setAttribute('cy', pt.y);
+          runnerGlow.setAttribute('r', String(gr));
+          runnerGlow.setAttribute('opacity', String(0.12 + beat * 0.42));
+          /* Ripple mengembang tiap denyut */
+          const ringT = (t % 0.85) / 0.85;
+          runnerRing.setAttribute('cx', pt.x); runnerRing.setAttribute('cy', pt.y);
+          runnerRing.setAttribute('r', String(6 + ringT * 18));
+          runnerRing.setAttribute('opacity', String(Math.max(0, (1 - ringT) * (0.35 + beat * 0.55))));
+          runner.style.display = '';
+          runnerGlow.style.display = '';
+          runnerRing.style.display = '';
+        }
+      } catch (_) { /* ignore */ }
+      dxHomeAnimRaf = requestAnimationFrame(tick);
+    };
+    dxHomeAnimRaf = requestAnimationFrame(tick);
+
+    const cross = el('line', { y1: T, y2: T + plotH, stroke: '#94a3b8', 'stroke-dasharray': '3 4', 'stroke-width': '1', style: 'display:none' });
+    const hdot = el('circle', { r: 5, fill: 'none', stroke: '#0d9488', 'stroke-width': '2', style: 'display:none' });
+    svg.appendChild(cross); svg.appendChild(hdot);
+    svg.appendChild(el('rect', { x: L, y: T, width: plotW, height: plotH, fill: 'transparent' }));
+
+    svg.onmousemove = (e) => {
+      const rbox = svg.getBoundingClientRect();
+      const mx = (e.clientX - rbox.left) * (W / rbox.width);
+      const i = Math.max(0, Math.min(pts.length - 1, Math.round((mx - L) / step)));
+      const p = pts[i];
+      cross.setAttribute('x1', p.x); cross.setAttribute('x2', p.x); cross.style.display = '';
+      hdot.setAttribute('cx', p.x); hdot.setAttribute('cy', p.y);
+      hdot.setAttribute('stroke', p.fc ? '#2563eb' : '#0d9488');
+      hdot.style.display = '';
+      tip.style.display = 'block';
+      tip.style.left = (p.x / W * 100) + '%';
+      tip.style.top = (p.y / H * 100) + '%';
+      tip.style.transform = p.x > W * .68 ? 'translate(-112%,-50%)' : 'translate(12%,-50%)';
+      tip.innerHTML = `<b>${labels[i]} · ${row.k}</b><span>${p.fc ? 'Forecast' : 'Aktual'} <b class="num">${p.v}</b> kasus</span>`;
+    };
+    svg.onmouseleave = () => {
+      cross.style.display = 'none'; hdot.style.display = 'none'; tip.style.display = 'none';
+    };
+
+    const lastFc = fc[fc.length - 1];
+    const delta = lastFc - hist[hist.length - 1];
+    $f('dx-home-chart-sub').textContent =
+      `${row.k} ${row.n} · akhir F4 ≈ ${lastFc} kasus (${delta >= 0 ? '+' : ''}${delta} vs minggu ini)`;
+  }
+
+  function renderDxHome() {
+    if (!$f('dx-home-grid')) return;
+    const ranked = DISEASE_TREND.map(r => ({ r, ch: dxChange(r), st: dxStatus(r) }))
+      .sort((a, b) => b.ch.pct - a.ch.pct);
+    const top = ranked.filter(x => x.ch.dir === 'up').slice(0, 3);
+    const chipSrc = top.length ? top : ranked.slice(0, 3);
+    if (!dxHomeSel || !chipSrc.some(x => x.r.k === dxHomeSel)) {
+      dxHomeSel = chipSrc[0] ? chipSrc[0].r.k : DISEASE_TREND[0].k;
+    }
+
+    $f('dx-home-grid').innerHTML = (top.length ? top : ranked.slice(0, 3)).map(({ r, ch, st }) => `
+      <div class="dx-card glass${dxHomeSel === r.k ? ' dx-sel' : ''}" data-home-dx="${r.k}" style="${dxHomeSel === r.k ? 'outline:2px solid rgba(13,148,136,.45);outline-offset:0;' : ''}">
+        <div class="dx-k">${r.k}</div>
+        <div class="dx-n">${r.n}</div>
+        <div class="dx-row">
+          <div class="dx-now">${r.now}<span style="font-size:.72rem;font-weight:600;color:var(--muted);margin-left:4px;">kasus</span></div>
+          <span class="dx-chg ${ch.dir}">${ch.label}</span>
+        </div>
+        <div class="dx-meta">${st.text} · vs ${r.prev} kasus periode lalu · ${r.obat.length} obat terkait</div>
+      </div>`).join('');
+    $f('dx-home-grid').querySelectorAll('[data-home-dx]').forEach(card => {
+      card.addEventListener('click', () => {
+        dxHomeSel = card.dataset.homeDx;
+        renderDxHome();
+      });
+      card.title = 'Klik untuk lihat forecast di grafik · buka detail lewat “Lihat semua di RME”';
+    });
+
+    if ($f('dx-home-chips')) {
+      $f('dx-home-chips').innerHTML = chipSrc.map(({ r }) =>
+        `<span class="chip${dxHomeSel === r.k ? ' on' : ''}" data-dxchip="${r.k}">${r.k}</span>`).join('');
+      $f('dx-home-chips').querySelectorAll('[data-dxchip]').forEach(c => {
+        c.addEventListener('click', (e) => {
+          e.stopPropagation();
+          dxHomeSel = c.dataset.dxchip;
+          renderDxHome();
+        });
+      });
+    }
+
+    const row = DISEASE_TREND.find(x => x.k === dxHomeSel) || DISEASE_TREND[0];
+    dxHomeForecastChart(row);
+  }
+  if ($f('dx-home-more')) {
+    $f('dx-home-more').addEventListener('click', () => gotoRmeTren());
+  }
+  document.querySelector('.app')?.classList.add('home-wide');
+  renderDxHome();
 
   function rmeVisits(p) {
     return (RME_VISITS[p.rm] || []).slice();
